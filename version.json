@@ -1,0 +1,48 @@
+{
+  "latest_version": "2.0.0",
+  "release_date": "2026-10-11",
+  "release_name": "LANDeploy v2.0.0 — Production Major Release",
+  "mandatory": false,
+  "min_supported_version": "1.0.0",
+  "release_notes": [
+    "Major architectural overhaul with high-concurrency background engine",
+    "Integrated GitHub release update mechanism for zero-touch distribution",
+    "Silent agent installer with real-time heartbeat and auto-discovery",
+    "Encrypted group chat hub with forensic audit and honeypot protection",
+    "High-speed multi-system parallel software deployment"
+  ],
+  "downloads": {
+    "server_setup": {
+      "name": "LANDeploy Server Setup 2.0.0.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.Setup.2.0.0.exe",
+      "fallback_url": "https://landeploy.vercel.app/SETUPS/LANDeploy%20Server%20Setup%202.0.0.exe"
+    },
+    "agent_setup": {
+      "name": "LANDeploy Agent Setup 2.0.0.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.Setup.2.0.0.exe",
+      "fallback_url": "https://landeploy.vercel.app/SETUPS/LANDeploy%20Agent%20Setup%202.0.0.exe"
+    },
+    "server_portable": {
+      "name": "LANDeploy Server 2.0.0.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.2.0.0.exe"
+    },
+    "agent_portable": {
+      "name": "LANDeploy Agent 2.0.0.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.2.0.0.exe"
+    }
+  },
+  "history": [
+    {
+      "version": "2.0.0",
+      "date": "2026-10-11",
+      "type": "Major Release",
+      "title": "LANDeploy 2.0 — The Unified Platform",
+      "notes": [
+        "Automated GitHub Releases auto-updater",
+        "Complete real-time LAN communication rewrite",
+        "Anti-tamper protection & security sweep modules",
+        "Seamless headless background daemon mode"
+      ]
+    }
+  ]
+}

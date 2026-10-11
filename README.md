@@ -3,8 +3,8 @@
 Official Release Ledger & Distribution Registry for **LANDeploy Server** & **LANDeploy Agent**.
 
 ## Live Ledger
-- **URL**: [https://landeploy-releases.vercel.app](https://landeploy-releases.vercel.app)
-- **Machine API**: [https://landeploy-releases.vercel.app/version.json](https://landeploy-releases.vercel.app/version.json)
+- **URL**: [https://landeployrelease.vercel.app](https://landeployrelease.vercel.app)
+- **Machine API**: [https://landeployrelease.vercel.app/version.json](https://landeployrelease.vercel.app/version.json)
 
 ## Update Automation
 Every time LANDeploy Host Server or Client Agent launches, it queries `version.json` and GitHub Releases. If:

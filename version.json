@@ -13,22 +13,22 @@
   ],
   "downloads": {
     "server_setup": {
-      "name": "LANDeploy Server Setup 2.0.0.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.Setup.2.0.0.exe",
-      "fallback_url": "https://landeploy.vercel.app/SETUPS/LANDeploy%20Server%20Setup%202.0.0.exe"
+      "name": "LANDeploy.Server.Setup.v2.0.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.Setup.v2.0.exe",
+      "fallback_url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.Setup.v2.0.exe"
     },
     "agent_setup": {
-      "name": "LANDeploy Agent Setup 2.0.0.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.Setup.2.0.0.exe",
-      "fallback_url": "https://landeploy.vercel.app/SETUPS/LANDeploy%20Agent%20Setup%202.0.0.exe"
+      "name": "LANDeploy.Agent.Setup.v2.0.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.Setup.v2.0.exe",
+      "fallback_url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.Setup.v2.0.exe"
     },
     "server_portable": {
-      "name": "LANDeploy Server 2.0.0.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.2.0.0.exe"
+      "name": "LANDeploy.Server.v2.0.portable.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.v2.0.portable.exe"
     },
     "agent_portable": {
-      "name": "LANDeploy Agent 2.0.0.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.2.0.0.exe"
+      "name": "LANDeploy.Agent.v2.0.portable.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.v2.0.portable.exe"
     }
   },
   "history": [

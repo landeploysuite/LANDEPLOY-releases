@@ -631,7 +631,7 @@
       </div>
 
       <div class="downloads-grid">
-        <a id="link-server" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.Setup.2.0.0.exe" class="dl-btn primary">
+        <a id="link-server" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.Setup.v2.0.exe" class="dl-btn primary">
           <div class="dl-icon"><i class="fas fa-server"></i></div>
           <div class="dl-details">
             <div class="dl-title">LANDeploy Server Setup</div>
@@ -640,11 +640,29 @@
           <i class="fas fa-arrow-down dl-arrow"></i>
         </a>
 
-        <a id="link-agent" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.Setup.2.0.0.exe" class="dl-btn primary">
+        <a id="link-agent" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.Setup.v2.0.exe" class="dl-btn primary">
           <div class="dl-icon"><i class="fas fa-desktop"></i></div>
           <div class="dl-details">
             <div class="dl-title">LANDeploy Agent Setup</div>
             <div class="dl-sub">v2.0.0 &bull; Windows (x64) &bull; Installer</div>
+          </div>
+          <i class="fas fa-arrow-down dl-arrow"></i>
+        </a>
+
+        <a id="link-server-portable" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.v2.0.portable.exe" class="dl-btn">
+          <div class="dl-icon"><i class="fas fa-box-archive"></i></div>
+          <div class="dl-details">
+            <div class="dl-title">LANDeploy Server Portable</div>
+            <div class="dl-sub">v2.0.0 &bull; Standalone .exe</div>
+          </div>
+          <i class="fas fa-arrow-down dl-arrow"></i>
+        </a>
+
+        <a id="link-agent-portable" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.v2.0.portable.exe" class="dl-btn">
+          <div class="dl-icon"><i class="fas fa-cube"></i></div>
+          <div class="dl-details">
+            <div class="dl-title">LANDeploy Agent Portable</div>
+            <div class="dl-sub">v2.0.0 &bull; Standalone .exe</div>
           </div>
           <i class="fas fa-arrow-down dl-arrow"></i>
         </a>
@@ -731,10 +749,20 @@
         }
         if (data.downloads) {
           if (data.downloads.server_setup && data.downloads.server_setup.url) {
-            document.getElementById('link-server').href = data.downloads.server_setup.url;
+            const el = document.getElementById('link-server');
+            if (el) el.href = data.downloads.server_setup.url;
           }
           if (data.downloads.agent_setup && data.downloads.agent_setup.url) {
-            document.getElementById('link-agent').href = data.downloads.agent_setup.url;
+            const el = document.getElementById('link-agent');
+            if (el) el.href = data.downloads.agent_setup.url;
+          }
+          if (data.downloads.server_portable && data.downloads.server_portable.url) {
+            const el = document.getElementById('link-server-portable');
+            if (el) el.href = data.downloads.server_portable.url;
+          }
+          if (data.downloads.agent_portable && data.downloads.agent_portable.url) {
+            const el = document.getElementById('link-agent-portable');
+            if (el) el.href = data.downloads.agent_portable.url;
           }
         }
         if (data.release_notes && data.release_notes.length > 0) {

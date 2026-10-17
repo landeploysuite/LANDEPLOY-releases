@@ -9,5 +9,37 @@
         { "key": "Cache-Control", "value": "public, max-age=60, s-maxage=60" }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/download/agent",
+      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.Setup.v2.0.exe",
+      "permanent": false
+    },
+    {
+      "source": "/download/server",
+      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.Setup.v2.0.exe",
+      "permanent": false
+    },
+    {
+      "source": "/download/agent-setup",
+      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.Setup.v2.0.exe",
+      "permanent": false
+    },
+    {
+      "source": "/download/server-setup",
+      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.Setup.v2.0.exe",
+      "permanent": false
+    },
+    {
+      "source": "/download/agent-portable",
+      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.v2.0.portable.exe",
+      "permanent": false
+    },
+    {
+      "source": "/download/server-portable",
+      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.v2.0.portable.exe",
+      "permanent": false
+    }
   ]
 }

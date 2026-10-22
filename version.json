@@ -1,37 +1,50 @@
 {
-  "latest_version": "2.0.0",
-  "release_date": "2026-10-11",
-  "release_name": "LANDeploy v2.0.0 — Production Major Release",
-  "mandatory": false,
+  "latest_version": "2.1.0",
+  "release_date": "2026-10-22",
+  "release_name": "LANDeploy v2.1.0 — Windows 11 Compatibility & UX Patch",
+  "mandatory": true,
   "min_supported_version": "1.0.0",
   "release_notes": [
-    "Major architectural overhaul with high-concurrency background engine",
-    "Integrated GitHub release update mechanism for zero-touch distribution",
-    "Silent agent installer with real-time heartbeat and auto-discovery",
-    "Encrypted group chat hub with forensic audit and honeypot protection",
-    "High-speed multi-system parallel software deployment"
+    "Fixed critical Windows 11 compatibility error (This app can't run on this version)",
+    "Added publisher name (LANDeploySuite) to all installers and update dialogs",
+    "Update dialog now shows Dismiss button to close without installing",
+    "Proper requestedExecutionLevel manifest prevents Windows PCA blocking",
+    "Android customer app login normalization and Kiosk activation patches",
+    "Includes all v2.0.0 core features and architecture"
   ],
   "downloads": {
     "server_setup": {
-      "name": "LANDeploy.Server.Setup.v2.0.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.Setup.v2.0.exe",
-      "fallback_url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.Setup.v2.0.exe"
+      "name": "LANDeploy.Server.Setup.v2.1.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.0/LANDeploy.Server.Setup.v2.1.exe",
+      "fallback_url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.0/LANDeploy.Server.Setup.v2.1.exe"
     },
     "agent_setup": {
-      "name": "LANDeploy.Agent.Setup.v2.0.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.Setup.v2.0.exe",
-      "fallback_url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.Setup.v2.0.exe"
+      "name": "LANDeploy.Agent.Setup.v2.1.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.0/LANDeploy.Agent.Setup.v2.1.exe",
+      "fallback_url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.0/LANDeploy.Agent.Setup.v2.1.exe"
     },
     "server_portable": {
-      "name": "LANDeploy.Server.v2.0.portable.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Server.v2.0.portable.exe"
+      "name": "LANDeploy.Server.v2.1.portable.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.0/LANDeploy.Server.v2.1.portable.exe"
     },
     "agent_portable": {
-      "name": "LANDeploy.Agent.v2.0.portable.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.0.0/LANDeploy.Agent.v2.0.portable.exe"
+      "name": "LANDeploy.Agent.v2.1.portable.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.0/LANDeploy.Agent.v2.1.portable.exe"
     }
   },
   "history": [
+    {
+      "version": "2.1.0",
+      "date": "2026-10-22",
+      "type": "Compatibility Patch",
+      "title": "LANDeploy 2.1 — Windows 11 Fix & Publisher UX",
+      "notes": [
+        "Windows 11 compatibility fix (requestedExecutionLevel asInvoker)",
+        "Publisher name displayed in update dialogs and installers",
+        "Dismissible update screens with Remind Me Later / Dismiss options",
+        "Android app login normalization and Kiosk activation patches"
+      ]
+    },
     {
       "version": "2.0.0",
       "date": "2026-10-11",

@@ -1,38 +1,50 @@
 {
-  "latest_version": "2.1.0",
-  "release_date": "2026-10-22",
-  "release_name": "LANDeploy v2.1.0 — Windows 11 Compatibility & UX Patch",
-  "mandatory": true,
+  "latest_version": "2.1.1",
+  "release_date": "2026-10-24",
+  "release_name": "LANDeploy v2.1.1 — Group Chat Fixes & Management",
+  "mandatory": false,
   "min_supported_version": "1.0.0",
   "release_notes": [
-    "Fixed critical Windows 11 compatibility error (This app can't run on this version)",
-    "Added publisher name (LANDeploySuite) to all installers and update dialogs",
-    "Update dialog now shows Dismiss button to close without installing",
-    "Proper requestedExecutionLevel manifest prevents Windows PCA blocking",
-    "Android customer app login normalization and Kiosk activation patches",
-    "Includes all v2.0.0 core features and architecture"
+    "Fixed group creation bug when server IP was not configured",
+    "Added group deletion with server-side cleanup of messages",
+    "Right-click context menu on groups: View Details, Copy ID, Delete",
+    "Group details modal showing creator, security, and participant info",
+    "Auto-detect loopback server and save config on beacon discovery",
+    "Includes all v2.1.0 Windows 11 compatibility fixes"
   ],
   "downloads": {
     "server_setup": {
-      "name": "LANDeploy.Server.Setup.v2.1.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.0/LANDeploy.Server.Setup.v2.1.exe",
-      "fallback_url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.0/LANDeploy.Server.Setup.v2.1.exe"
+      "name": "LANDeploy.Server.Setup.v2.1.1.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Server.Setup.2.1.1.exe",
+      "fallback_url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Server.Setup.2.1.1.exe"
     },
     "agent_setup": {
-      "name": "LANDeploy.Agent.Setup.v2.1.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.0/LANDeploy.Agent.Setup.v2.1.exe",
-      "fallback_url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.0/LANDeploy.Agent.Setup.v2.1.exe"
+      "name": "LANDeploy.Agent.Setup.v2.1.1.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Agent.Setup.2.1.1.exe",
+      "fallback_url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Agent.Setup.2.1.1.exe"
     },
     "server_portable": {
-      "name": "LANDeploy.Server.v2.1.portable.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.0/LANDeploy.Server.v2.1.portable.exe"
+      "name": "LANDeploy.Server.v2.1.1.portable.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Server.2.1.1.exe"
     },
     "agent_portable": {
-      "name": "LANDeploy.Agent.v2.1.portable.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.0/LANDeploy.Agent.v2.1.portable.exe"
+      "name": "LANDeploy.Agent.v2.1.1.portable.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Agent.2.1.1.exe"
     }
   },
   "history": [
+    {
+      "version": "2.1.1",
+      "date": "2026-10-24",
+      "type": "Bug Fix & Feature",
+      "title": "LANDeploy 2.1.1 — Group Chat Fixes & Management",
+      "notes": [
+        "Fixed group creation bug (missing server IP fallback to 127.0.0.1)",
+        "Group deletion API with full message cleanup",
+        "Right-click context menu: Details, Copy ID, Delete Group",
+        "Auto-detect loopback server and persist config on beacon"
+      ]
+    },
     {
       "version": "2.1.0",
       "date": "2026-10-22",

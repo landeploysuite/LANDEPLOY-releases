@@ -1,55 +1,64 @@
 {
   "latest_version": "2.1.1",
-  "release_date": "2026-10-24",
-  "release_name": "LANDeploy v2.1.1 — Group Chat Fixes & Management",
+  "release_date": "2026-11-05",
+  "release_name": "LANDeploy v2.1.1 \u2014 Enterprise Hardened Release",
   "mandatory": false,
   "min_supported_version": "1.0.0",
   "release_notes": [
-    "Fixed group creation bug when server IP was not configured",
-    "Added group deletion with server-side cleanup of messages",
-    "Right-click context menu on groups: View Details, Copy ID, Delete",
-    "Group details modal showing creator, security, and participant info",
-    "Auto-detect loopback server and save config on beacon discovery",
-    "Includes all v2.1.0 Windows 11 compatibility fixes"
+    "Program Files data path isolation with zero-elevation user permissions",
+    "MSI installers with custom branded WiX wizard dialogs & high-res icons",
+    "Kinetic smooth momentum inertia scrolling with dynamic velocity motion blur",
+    "Real-time registered PCs synchronization on unlink",
+    "Windows Store MSIX & AppX sideloading package support with trusted certificates",
+    "Headless Python backend execution with persistent logging"
   ],
   "downloads": {
     "server_setup": {
-      "name": "LANDeploy.Server.Setup.v2.1.1.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Server.Setup.2.1.1.exe",
-      "fallback_url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Server.Setup.2.1.1.exe"
+      "name": "LANDeploy Server Installer 2.1.1.msi",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Installer%202.1.1.msi",
+      "fallback_url": "https://landeploy.vercel.app/SETUPS/LANDeploy%20Server%20Installer%202.1.1.msi"
     },
     "agent_setup": {
-      "name": "LANDeploy.Agent.Setup.v2.1.1.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Agent.Setup.2.1.1.exe",
-      "fallback_url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Agent.Setup.2.1.1.exe"
+      "name": "LANDeploy Agent Installer 2.1.1.msi",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Installer%202.1.1.msi",
+      "fallback_url": "https://landeploy.vercel.app/SETUPS/LANDeploy%20Agent%20Installer%202.1.1.msi"
     },
     "server_portable": {
-      "name": "LANDeploy.Server.v2.1.1.portable.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Server.2.1.1.exe"
+      "name": "LANDeploy Server Portable 2.1.1.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Portable%202.1.1.exe"
     },
     "agent_portable": {
-      "name": "LANDeploy.Agent.v2.1.1.portable.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Agent.2.1.1.exe"
+      "name": "LANDeploy Agent Portable 2.1.1.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Portable%202.1.1.exe"
+    },
+    "server_msix": {
+      "name": "LANDeploy Server 2.1.1.msix",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%202.1.1.msix"
+    },
+    "agent_msix": {
+      "name": "LANDeploy Agent 2.1.1.msix",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%202.1.1.msix"
     }
   },
   "history": [
     {
       "version": "2.1.1",
-      "date": "2026-10-24",
-      "type": "Bug Fix & Feature",
-      "title": "LANDeploy 2.1.1 — Group Chat Fixes & Management",
+      "date": "2026-11-05",
+      "type": "Production Enterprise Release",
+      "title": "LANDeploy 2.1.1 \u2014 Enterprise Hardened Edition",
       "notes": [
-        "Fixed group creation bug (missing server IP fallback to 127.0.0.1)",
-        "Group deletion API with full message cleanup",
-        "Right-click context menu: Details, Copy ID, Delete Group",
-        "Auto-detect loopback server and persist config on beacon"
+        "Full C:\\Program Files non-admin installation & safe AppData path isolation",
+        "WiX MSI native installer with custom branding and multi-layer icons",
+        "Kinetic momentum scrolling with speed-based dynamic motion blur",
+        "Instant real-time registered PCs deletion & sync",
+        "Sideloadable MSIX packages with auto-trust certificate helper"
       ]
     },
     {
       "version": "2.1.0",
       "date": "2026-10-22",
       "type": "Compatibility Patch",
-      "title": "LANDeploy 2.1 — Windows 11 Fix & Publisher UX",
+      "title": "LANDeploy 2.1 \u2014 Windows 11 Fix & Publisher UX",
       "notes": [
         "Windows 11 compatibility fix (requestedExecutionLevel asInvoker)",
         "Publisher name displayed in update dialogs and installers",
@@ -61,7 +70,7 @@
       "version": "2.0.0",
       "date": "2026-10-11",
       "type": "Major Release",
-      "title": "LANDeploy 2.0 — The Unified Platform",
+      "title": "LANDeploy 2.0 \u2014 The Unified Platform",
       "notes": [
         "Automated GitHub Releases auto-updater",
         "Complete real-time LAN communication rewrite",

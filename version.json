@@ -6,7 +6,7 @@
   "min_supported_version": "1.0.0",
   "release_notes": [
     "Security Audit & Hardening: Resolved all 7 critical Cloudflare/webhook vulnerabilities (XSS DOM sanitization, group deletion authorization, SSRF validation, brute-force lockout, CSPRNG password reset, 2MB avatar caps).",
-    "TLauncher Cyber Splash Screen: High-tech startup HUD with live hardware and config loading logs for Portable editions.",
+    "Cyber Startup Splash HUD: High-tech startup window with live hardware and config loading logs for Portable editions.",
     "AppData State Persistence: Portable mode syncs configuration and PC chats to %APPDATA%\\LANDeploy\\ preserving workstation profiles across USB unplugs.",
     "Modular LANDeploy-AV: Antivirus definitions decoupled into on-demand package (LANDEPLOY-AV.zip) with 1-click in-app download and extraction.",
     "Dual Enterprise Packaging: Native Windows Setup Wizards (.exe) and Active Directory / Intune MSI packages (.msi) with zero-trace uninstaller."
@@ -70,7 +70,7 @@
       "title": "LANDeploy 2.1.1 — Enterprise Hardened Edition",
       "notes": [
         "Patched 7 critical Cloudflare/webhook security vulnerabilities",
-        "Cyber-themed TLauncher startup splash HUD with real-time logs",
+        "Cyber-themed startup splash HUD with real-time logs",
         "System AppData configuration sync for portable versions",
         "Modular on-demand LANDeploy-AV antivirus package",
         "Full MSI & EXE dual installers with zero-trace uninstaller"

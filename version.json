@@ -1,64 +1,86 @@
 {
   "latest_version": "2.1.1",
-  "release_date": "2026-11-05",
-  "release_name": "LANDeploy v2.1.1 \u2014 Enterprise Hardened Release",
+  "release_date": "2026-11-07",
+  "release_name": "LANDeploy v2.1.1 — Enterprise Hardened Release",
   "mandatory": false,
   "min_supported_version": "1.0.0",
   "release_notes": [
-    "Program Files data path isolation with zero-elevation user permissions",
-    "MSI installers with custom branded WiX wizard dialogs & high-res icons",
-    "Kinetic smooth momentum inertia scrolling with dynamic velocity motion blur",
-    "Real-time registered PCs synchronization on unlink",
-    "Windows Store MSIX & AppX sideloading package support with trusted certificates",
-    "Headless Python backend execution with persistent logging"
+    "Security Audit & Hardening: Resolved all 7 critical Cloudflare/webhook vulnerabilities (XSS DOM sanitization, group deletion authorization, SSRF validation, brute-force lockout, CSPRNG password reset, 2MB avatar caps).",
+    "TLauncher Cyber Splash Screen: High-tech startup HUD with live hardware and config loading logs for Portable editions.",
+    "AppData State Persistence: Portable mode syncs configuration and PC chats to %APPDATA%\\LANDeploy\\ preserving workstation profiles across USB unplugs.",
+    "Modular LANDeploy-AV: Antivirus definitions decoupled into on-demand package (LANDEPLOY-AV.zip) with 1-click in-app download and extraction.",
+    "Dual Enterprise Packaging: Native Windows Setup Wizards (.exe) and Active Directory / Intune MSI packages (.msi) with zero-trace uninstaller."
   ],
   "downloads": {
     "server_setup": {
+      "name": "LANDeploy Server Setup 2.1.1.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Setup%202.1.1.exe",
+      "fallback_url": "https://landeploy.vercel.app/SETUPS/v2.1.1/LANDeploy%20Server%20Setup%202.1.1.exe",
+      "size_bytes": 136153347,
+      "sha256": "2125BF549E834D17C138F2B64F4108294A081CD2A3A8D9DCC07B9681E6094B1B"
+    },
+    "server_msi": {
       "name": "LANDeploy Server Installer 2.1.1.msi",
       "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Installer%202.1.1.msi",
-      "fallback_url": "https://landeploy.vercel.app/SETUPS/LANDeploy%20Server%20Installer%202.1.1.msi"
-    },
-    "agent_setup": {
-      "name": "LANDeploy Agent Installer 2.1.1.msi",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Installer%202.1.1.msi",
-      "fallback_url": "https://landeploy.vercel.app/SETUPS/LANDeploy%20Agent%20Installer%202.1.1.msi"
+      "fallback_url": "https://landeploy.vercel.app/SETUPS/v2.1.1/LANDeploy%20Server%20Installer%202.1.1.msi",
+      "size_bytes": 154248155,
+      "sha256": "E394E5FE0AA26772F140872B8E33F5F54F0A154CB1704B1DB72BEE021802ADE4"
     },
     "server_portable": {
       "name": "LANDeploy Server Portable 2.1.1.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Portable%202.1.1.exe"
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Portable%202.1.1.exe",
+      "fallback_url": "https://landeploy.vercel.app/SETUPS/v2.1.1/LANDeploy%20Server%20Portable%202.1.1.exe",
+      "size_bytes": 135914786,
+      "sha256": "DF0ABA89CFC9FB6968DF985B014049F1234B07F241451196F65227F9634FB750"
+    },
+    "agent_setup": {
+      "name": "LANDeploy Agent Setup 2.1.1.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Setup%202.1.1.exe",
+      "fallback_url": "https://landeploy.vercel.app/SETUPS/v2.1.1/LANDeploy%20Agent%20Setup%202.1.1.exe",
+      "size_bytes": 114718282,
+      "sha256": "FE5F9F13F7006F357D067A70364B12B8D23A2C7210149C8D323C34C4579EE6E6"
+    },
+    "agent_msi": {
+      "name": "LANDeploy Agent Installer 2.1.1.msi",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Installer%202.1.1.msi",
+      "fallback_url": "https://landeploy.vercel.app/SETUPS/v2.1.1/LANDeploy%20Agent%20Installer%202.1.1.msi",
+      "size_bytes": 130322432,
+      "sha256": "7974858108EE7D33804EE3CA999F252395F32F2EA99D77F020EC98EF8AC07951"
     },
     "agent_portable": {
       "name": "LANDeploy Agent Portable 2.1.1.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Portable%202.1.1.exe"
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Portable%202.1.1.exe",
+      "fallback_url": "https://landeploy.vercel.app/SETUPS/v2.1.1/LANDeploy%20Agent%20Portable%202.1.1.exe",
+      "size_bytes": 114479688,
+      "sha256": "33355707A19586967E087BF395EC94C7875A79EBCB553C672C3CB619661F5D0A"
     },
-    "server_msix": {
-      "name": "LANDeploy Server 2.1.1.msix",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%202.1.1.msix"
-    },
-    "agent_msix": {
-      "name": "LANDeploy Agent 2.1.1.msix",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%202.1.1.msix"
+    "av_addon": {
+      "name": "LANDEPLOY-AV.zip",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDEPLOY-AV.zip",
+      "fallback_url": "https://landeploy.vercel.app/SETUPS/v2.1.1/LANDEPLOY-AV.zip",
+      "size_bytes": 30557081,
+      "sha256": "1BD14C98EDE50829D90B32C52F967BF8402ADA93CBAA8EC5EE9E1240DC5F94EC"
     }
   },
   "history": [
     {
       "version": "2.1.1",
-      "date": "2026-11-05",
+      "date": "2026-11-07",
       "type": "Production Enterprise Release",
-      "title": "LANDeploy 2.1.1 \u2014 Enterprise Hardened Edition",
+      "title": "LANDeploy 2.1.1 — Enterprise Hardened Edition",
       "notes": [
-        "Full C:\\Program Files non-admin installation & safe AppData path isolation",
-        "WiX MSI native installer with custom branding and multi-layer icons",
-        "Kinetic momentum scrolling with speed-based dynamic motion blur",
-        "Instant real-time registered PCs deletion & sync",
-        "Sideloadable MSIX packages with auto-trust certificate helper"
+        "Patched 7 critical Cloudflare/webhook security vulnerabilities",
+        "Cyber-themed TLauncher startup splash HUD with real-time logs",
+        "System AppData configuration sync for portable versions",
+        "Modular on-demand LANDeploy-AV antivirus package",
+        "Full MSI & EXE dual installers with zero-trace uninstaller"
       ]
     },
     {
       "version": "2.1.0",
       "date": "2026-10-22",
       "type": "Compatibility Patch",
-      "title": "LANDeploy 2.1 \u2014 Windows 11 Fix & Publisher UX",
+      "title": "LANDeploy 2.1 — Windows 11 Fix & Publisher UX",
       "notes": [
         "Windows 11 compatibility fix (requestedExecutionLevel asInvoker)",
         "Publisher name displayed in update dialogs and installers",
@@ -70,7 +92,7 @@
       "version": "2.0.0",
       "date": "2026-10-11",
       "type": "Major Release",
-      "title": "LANDeploy 2.0 \u2014 The Unified Platform",
+      "title": "LANDeploy 2.0 — The Unified Platform",
       "notes": [
         "Automated GitHub Releases auto-updater",
         "Complete real-time LAN communication rewrite",

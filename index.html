@@ -4,25 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LANDeploy — Official Release Ledger & Updates Registry</title>
+  <meta name="description" content="Download LANDeploy Suite v2.1.1 — LAN-based school/lab PC orchestration platform. Server & Agent installers, Enterprise MSI, Portable editions.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     :root {
-      --bg: #0B1120;
-      --bg-card: rgba(15, 23, 42, 0.75);
-      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --bg: #030712;
+      --bg-card: rgba(15, 23, 42, 0.65);
       --border: rgba(255, 255, 255, 0.08);
-      --border-glow: rgba(56, 189, 248, 0.3);
-      --cyan: #38bdf8;
-      --cyan-glow: rgba(56, 189, 248, 0.25);
+      --border-glow: rgba(34, 211, 238, 0.35);
+      --cyan: #22d3ee;
       --blue: #3b82f6;
       --green: #10b981;
-      --green-dim: rgba(16, 185, 129, 0.15);
-      --amber: #f59e0b;
-      --amber-dim: rgba(245, 158, 11, 0.15);
-      --text: #f8fafc;
+      --amber: #fbbf24;
+      --purple: #c084fc;
+      --indigo: #818cf8;
+      --rose: #fb7185;
+      --text: #f3f4f6;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
       --mono: 'JetBrains Mono', monospace;
@@ -30,671 +30,751 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
     body {
       background: var(--bg);
       color: var(--text);
       font-family: var(--sans);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
       overflow-x: hidden;
       line-height: 1.5;
+      perspective: 1200px;
     }
 
-    /* Ambient background grid */
-    .ambient-bg {
+    /* ═══════════════════════════════════════════
+       GPU ACCELERATION UTILITIES
+    ═══════════════════════════════════════════ */
+    .gpu { transform: translateZ(0); will-change: transform, opacity; backface-visibility: hidden; }
+
+    /* ═══════════════════════════════════════════
+       AMBIENT BACKGROUND LAYERS
+    ═══════════════════════════════════════════ */
+    #ambient-canvas {
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+    }
+
+    .hero-radial {
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse at 50% 20%, rgba(6, 182, 212, 0.12) 0%, rgba(59, 130, 246, 0.06) 35%, transparent 70%);
+      pointer-events: none; z-index: 1;
+    }
+
+    .scanlines {
+      position: fixed; inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%),
+                  linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.01));
+      background-size: 100% 4px, 6px 100%;
+      pointer-events: none; z-index: 2;
+      opacity: 0.4;
+    }
+
+    /* ═══════════════════════════════════════════
+       3D FLOATING ICON TOKENS
+    ═══════════════════════════════════════════ */
+    .docking-token {
       position: fixed;
-      inset: 0;
-      background: 
-        radial-gradient(circle at 20% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 80% 85%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
-      z-index: -1;
+      pointer-events: none;
+      z-index: 50;
+      width: 72px; height: 72px;
+      border-radius: 18px;
+      overflow: hidden;
+      will-change: transform, opacity, box-shadow;
+      transform-style: preserve-3d;
+      border: 1px solid rgba(34, 211, 238, 0.25);
+    }
+
+    .docking-token img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 18px;
       pointer-events: none;
     }
 
-    header {
-      padding: 24px 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* Dock slot placeholder in cards */
+    .dock-slot {
+      width: 56px; height: 56px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1.5px dashed rgba(255, 255, 255, 0.12);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .dock-slot.docked-active {
+      border-style: solid;
+      border-color: rgba(34, 211, 238, 0.6);
+      background: rgba(6, 182, 212, 0.12);
+      box-shadow: 0 0 28px -4px rgba(34, 211, 238, 0.35);
+    }
+
+    /* ═══════════════════════════════════════════
+       STICKY HEADER / NAV
+    ═══════════════════════════════════════════ */
+    .site-nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200;
+      background: rgba(3, 7, 18, 0.82);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
       border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(12px);
-      background: rgba(11, 17, 32, 0.8);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      padding: 14px 28px;
+      display: flex; align-items: center; justify-content: space-between;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: inherit;
-    }
-
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
     .brand-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #0284c7, #2563eb);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      color: #fff;
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, #0891b2, #2563eb);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; color: #fff;
+      box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
     }
-
-    .brand-title {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .brand-title { font-size: 15px; font-weight: 800; letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px; }
     .brand-badge {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      color: var(--cyan);
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-weight: 700;
+      font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em;
+      background: rgba(34, 211, 238, 0.15); border: 1px solid rgba(34, 211, 238, 0.3);
+      color: var(--cyan); padding: 2px 8px; border-radius: 5px; font-weight: 700;
     }
-
-    .header-links {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
+    .nav-links { display: flex; align-items: center; gap: 10px; }
     .nav-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-decoration: none;
-      padding: 8px 14px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.02);
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; color: var(--text-muted);
+      text-decoration: none; padding: 7px 12px; border-radius: 8px;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.02);
       transition: all 0.2s;
     }
+    .nav-btn:hover { color: var(--text); background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); }
+    .nav-btn.green { color: var(--green); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.08); }
+    .nav-btn.green:hover { background: rgba(16,185,129,0.15); }
 
-    .nav-btn:hover {
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.2);
+    /* HUD status bar */
+    .hud-bar {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+      background: rgba(15, 23, 42, 0.9); padding: 5px 14px; border-radius: 20px;
+      border: 1px solid var(--border);
     }
+    .hud-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 48px 24px;
-      width: 100%;
-      flex: 1;
-    }
+    /* ═══════════════════════════════════════════
+       MAIN CONTENT WRAPPER
+    ═══════════════════════════════════════════ */
+    .main-viewport { position: relative; z-index: 10; padding-top: 64px; }
 
-    /* Hero Section */
+    /* ═══════════════════════════════════════════
+       HERO SECTION
+    ═══════════════════════════════════════════ */
     .hero {
+      min-height: 88vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
       text-align: center;
-      margin-bottom: 48px;
+      padding: 60px 24px;
+      position: relative;
+      max-width: 900px; margin: 0 auto;
     }
 
     .hero-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      font-family: var(--mono);
-      background: var(--green-dim);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      color: var(--green);
-      padding: 6px 14px;
-      border-radius: 20px;
-      margin-bottom: 20px;
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-family: var(--mono); font-weight: 600;
+      background: rgba(34, 211, 238, 0.08); border: 1px solid rgba(34, 211, 238, 0.3);
+      color: var(--cyan); padding: 6px 16px; border-radius: 24px;
+      margin-bottom: 24px; animation: float-gentle 3s ease-in-out infinite;
     }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 10px var(--green);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
+    @keyframes float-gentle { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 
     .hero h1 {
-      font-size: 44px;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      margin-bottom: 12px;
-      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 900; letter-spacing: -0.035em;
+      line-height: 1.08; margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff 20%, #94a3b8 80%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--cyan), #38bdf8, var(--blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
     }
 
     .hero p {
-      font-size: 16px;
-      color: var(--text-muted);
-      max-width: 620px;
-      margin: 0 auto;
+      font-size: 16px; color: var(--text-muted);
+      max-width: 560px; margin: 0 auto 32px; line-height: 1.7;
     }
 
-    /* Latest Release Spotlight Card */
-    .spotlight-card {
-      background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%);
-      border: 1px solid var(--border-glow);
-      border-radius: 20px;
-      padding: 36px;
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(56, 189, 248, 0.1);
-      margin-bottom: 48px;
-      position: relative;
-      overflow: hidden;
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 32px; border-radius: 14px;
+      background: linear-gradient(135deg, #0891b2, #2563eb);
+      color: #fff; font-weight: 800; font-size: 14px;
+      text-decoration: none; cursor: pointer; border: none;
+      box-shadow: 0 8px 32px rgba(34, 211, 238, 0.25);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
+    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(34, 211, 238, 0.4); }
 
-    .spotlight-badge {
-      position: absolute;
-      top: 0;
-      right: 36px;
-      background: linear-gradient(135deg, #0284c7, #2563eb);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 6px 16px;
-      border-radius: 0 0 10px 10px;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+    /* Orbital rings */
+    .orbital-ring {
+      position: absolute; border-radius: 50%; border: 1px solid rgba(34, 211, 238, 0.08);
+      pointer-events: none;
     }
+    .orbital-ring.r1 { width: 500px; height: 500px; animation: spin 45s linear infinite; }
+    .orbital-ring.r2 { width: 700px; height: 700px; animation: spin 65s linear infinite reverse; border-color: rgba(59,130,246,0.06); }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    .spotlight-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 28px;
+    /* ═══════════════════════════════════════════
+       KIOSK NOTICE BANNER
+    ═══════════════════════════════════════════ */
+    .kiosk-banner {
+      max-width: 1100px; margin: 0 auto 40px; padding: 0 24px;
     }
-
-    .spotlight-meta h2 {
-      font-size: 30px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    .kiosk-inner {
+      background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(34,211,238,0.08));
+      border: 1px solid rgba(16,185,129,0.3);
+      border-radius: 16px; padding: 20px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 20px; flex-wrap: wrap;
+      box-shadow: 0 10px 30px -10px rgba(16,185,129,0.15);
     }
-
-    .version-tag {
-      font-family: var(--mono);
-      font-size: 18px;
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      color: var(--cyan);
-      padding: 3px 12px;
-      border-radius: 8px;
+    .kiosk-content { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 260px; }
+    .kiosk-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(16,185,129,0.18); border: 1px solid rgba(16,185,129,0.35);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: var(--green); flex-shrink: 0;
     }
-
-    .spotlight-sub {
-      font-size: 14px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .downloads-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-
-    .dl-btn {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 16px 20px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border);
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .dl-btn:hover {
-      background: rgba(56, 189, 248, 0.08);
-      border-color: var(--cyan);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.15);
-    }
-
-    .dl-btn.primary {
-      background: linear-gradient(135deg, rgba(2, 132, 199, 0.3), rgba(37, 99, 235, 0.2));
-      border-color: rgba(56, 189, 248, 0.4);
-    }
-
-    .dl-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      background: rgba(56, 189, 248, 0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      color: var(--cyan);
-      flex-shrink: 0;
-    }
-
-    .dl-details {
-      flex: 1;
-    }
-
-    .dl-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .dl-sub {
-      font-size: 11px;
-      color: var(--text-dim);
-      font-family: var(--mono);
-      margin-top: 2px;
-    }
-
-    .dl-arrow {
-      color: var(--text-muted);
-      transition: transform 0.2s;
-    }
-
-    .dl-btn:hover .dl-arrow {
-      color: var(--cyan);
-      transform: translateX(4px);
-    }
-
-    /* Changelog bullets */
-    .changelog-box {
-      background: rgba(11, 17, 32, 0.6);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-    }
-
-    .changelog-box h3 {
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-dim);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .changelog-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .changelog-item {
-      font-size: 13px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-    }
-
-    .changelog-item i {
-      color: var(--cyan);
-      margin-top: 4px;
-      font-size: 10px;
-    }
-
-    /* Ledger Timeline Table */
-    .section-title {
-      font-size: 22px;
-      font-weight: 800;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .ledger-table-wrapper {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      margin-bottom: 48px;
-    }
-
-    .ledger-table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-    }
-
-    .ledger-table th {
-      padding: 16px 20px;
-      background: rgba(255, 255, 255, 0.02);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-dim);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .ledger-table td {
-      padding: 18px 20px;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
-      vertical-align: middle;
-    }
-
-    .ledger-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .tag-major {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 3px 8px;
-      border-radius: 6px;
-      background: rgba(56, 189, 248, 0.15);
-      color: var(--cyan);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-    }
-
-    /* API Endpoint Box */
-    .api-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .api-endpoint {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(11, 17, 32, 0.9);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 18px;
-      font-family: var(--mono);
-      font-size: 13px;
-    }
-
-    .copy-btn {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-
-    .copy-btn:hover {
-      background: rgba(255, 255, 255, 0.12);
-      color: #fff;
-    }
-
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 32px;
-      text-align: center;
-      font-size: 13px;
-      color: var(--text-dim);
-      background: rgba(11, 17, 32, 0.5);
-    }
-
-    /* Kiosk Notice Banner */
-    .kiosk-notice-banner {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(56, 189, 248, 0.12));
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      border-radius: 16px;
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 36px;
-      box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.2);
-      flex-wrap: wrap;
-    }
-
-    .kiosk-notice-content {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex: 1;
-      min-width: 280px;
-    }
-
-    .kiosk-notice-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      background: rgba(16, 185, 129, 0.2);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      color: #10b981;
-      flex-shrink: 0;
-    }
-
-    .kiosk-notice-tag {
-      font-size: 10px;
-      font-weight: 800;
-      color: #10b981;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 2px;
-    }
-
-    .kiosk-notice-text h3 {
-      font-size: 16px;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 2px;
-    }
-
-    .kiosk-notice-text p {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .kiosk-notice-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 22px;
-      border-radius: 10px;
+    .kiosk-tag { font-size: 10px; font-weight: 800; color: var(--green); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+    .kiosk-text h3 { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 2px; }
+    .kiosk-text p { font-size: 12px; color: var(--text-muted); }
+    .kiosk-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 10px;
       background: linear-gradient(135deg, #10b981, #059669);
-      color: #fff;
-      font-weight: 700;
-      font-size: 13px;
-      text-decoration: none;
-      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
-      transition: all 0.25s;
-      flex-shrink: 0;
+      color: #fff; font-weight: 700; font-size: 12px;
+      text-decoration: none; box-shadow: 0 4px 15px rgba(16,185,129,0.3);
+      transition: all 0.25s; flex-shrink: 0;
+    }
+    .kiosk-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16,185,129,0.45); }
+
+    /* ═══════════════════════════════════════════
+       DOWNLOAD CARDS SECTION
+    ═══════════════════════════════════════════ */
+    .cards-section {
+      max-width: 1200px; margin: 0 auto;
+      padding: 60px 24px 40px;
     }
 
-    .kiosk-notice-btn:hover {
-      background: linear-gradient(135deg, #059669, #047857);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    .section-header {
+      display: flex; flex-direction: column; gap: 4px;
+      margin-bottom: 40px; padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-header .tag { font-size: 11px; font-family: var(--mono); font-weight: 700; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.12em; }
+    .section-header h2 { font-size: clamp(24px, 4vw, 36px); font-weight: 900; letter-spacing: -0.02em; }
+    .section-header p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    /* Glass Card */
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card:hover {
+      border-color: rgba(34, 211, 238, 0.4);
+      box-shadow: 0 20px 40px -12px rgba(6, 182, 212, 0.2);
+      transform: translateY(-3px);
+    }
+    .glass-card.primary {
+      background: linear-gradient(135deg, rgba(8, 47, 73, 0.55), rgba(15, 23, 42, 0.8));
+      border-color: rgba(34, 211, 238, 0.3);
+    }
+    .glass-card.primary:hover {
+      border-color: rgba(34, 211, 238, 0.7);
+      box-shadow: 0 24px 48px -12px rgba(6, 182, 212, 0.35);
+    }
+
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .card-badge {
+      font-size: 10px; font-family: var(--mono); font-weight: 700;
+      padding: 3px 10px; border-radius: 6px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .card-badge.cyan { background: rgba(34,211,238,0.15); color: var(--cyan); border: 1px solid rgba(34,211,238,0.3); }
+    .card-badge.blue { background: rgba(59,130,246,0.15); color: var(--blue); border: 1px solid rgba(59,130,246,0.3); }
+    .card-badge.green { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+    .card-badge.purple { background: rgba(192,132,252,0.15); color: var(--purple); border: 1px solid rgba(192,132,252,0.3); }
+    .card-badge.indigo { background: rgba(129,140,248,0.15); color: var(--indigo); border: 1px solid rgba(129,140,248,0.3); }
+    .card-badge.amber { background: rgba(251,191,36,0.15); color: var(--amber); border: 1px solid rgba(251,191,36,0.3); }
+    .card-badge.rose { background: rgba(251,113,133,0.15); color: var(--rose); border: 1px solid rgba(251,113,133,0.3); }
+    .card-size { font-size: 11px; font-family: var(--mono); color: var(--text-dim); }
+
+    .card-info { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .card-info h3 { font-size: 17px; font-weight: 800; color: #fff; }
+    .card-info .filename { font-size: 11px; font-family: var(--mono); color: var(--text-dim); margin-top: 3px; }
+
+    .card-desc { font-size: 12px; color: #cbd5e1; line-height: 1.6; margin-bottom: 14px; }
+
+    .card-features { list-style: none; display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+    .card-features li {
+      font-size: 11px; font-family: var(--mono); color: var(--text-muted);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .card-features li i { font-size: 9px; flex-shrink: 0; }
+
+    .card-footer { border-top: 1px solid var(--border); padding-top: 16px; }
+    .dl-link {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 11px; border-radius: 12px;
+      font-weight: 700; font-size: 12px; text-decoration: none;
+      transition: all 0.25s; color: #fff;
+    }
+    .dl-link:hover { transform: translateY(-1px); }
+    .dl-link.cyan-bg { background: linear-gradient(135deg, #0891b2, #06b6d4); box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
+    .dl-link.cyan-bg:hover { box-shadow: 0 6px 24px rgba(6,182,212,0.45); }
+    .dl-link.blue-bg { background: linear-gradient(135deg, #2563eb, #3b82f6); box-shadow: 0 4px 16px rgba(59,130,246,0.3); }
+    .dl-link.green-bg { background: linear-gradient(135deg, #059669, #10b981); box-shadow: 0 4px 16px rgba(16,185,129,0.3); }
+    .dl-link.purple-bg { background: linear-gradient(135deg, #7c3aed, #a855f7); box-shadow: 0 4px 16px rgba(168,85,247,0.3); }
+    .dl-link.indigo-bg { background: linear-gradient(135deg, #4338ca, #6366f1); box-shadow: 0 4px 16px rgba(99,102,241,0.3); }
+    .dl-link.amber-bg { background: linear-gradient(135deg, #d97706, #f59e0b); color: #000; box-shadow: 0 4px 16px rgba(245,158,11,0.3); }
+    .dl-link.rose-bg { background: linear-gradient(135deg, #e11d48, #f43f5e); box-shadow: 0 4px 16px rgba(244,63,94,0.3); }
+
+    /* AV Addon wide card */
+    .card-wide {
+      grid-column: 1 / -1;
+      border-color: rgba(251,113,133,0.25);
+      background: linear-gradient(135deg, rgba(76,5,25,0.2), rgba(15,23,42,0.65));
+    }
+    .card-wide .card-wide-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px; flex-wrap: wrap;
+    }
+    .card-wide .card-wide-left { display: flex; align-items: flex-start; gap: 14px; flex: 1; min-width: 280px; }
+    .card-wide .card-wide-right { flex-shrink: 0; }
+
+    /* ═══════════════════════════════════════════
+       LEDGER TABLE
+    ═══════════════════════════════════════════ */
+    .ledger-section { max-width: 1100px; margin: 0 auto; padding: 20px 24px 40px; }
+    .ledger-title {
+      font-size: 22px; font-weight: 800;
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px;
+    }
+    .ledger-wrap {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+    }
+    .ledger-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .ledger-table th {
+      padding: 14px 20px; background: rgba(255,255,255,0.02);
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-dim);
+      border-bottom: 1px solid var(--border);
+    }
+    .ledger-table td {
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      font-size: 13px; vertical-align: middle;
+    }
+    .ledger-table tr:last-child td { border-bottom: none; }
+    .tag-badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 3px 8px; border-radius: 6px;
+    }
+    .tag-badge.cyan { background: rgba(34,211,238,0.15); color: var(--cyan); border: 1px solid rgba(34,211,238,0.3); }
+    .tag-badge.green { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+
+    /* ═══════════════════════════════════════════
+       API CARD
+    ═══════════════════════════════════════════ */
+    .api-section { max-width: 1100px; margin: 0 auto; padding: 0 24px 60px; }
+    .api-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+    }
+    .api-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
+    .api-endpoint {
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(3,7,18,0.9); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 16px;
+      font-family: var(--mono); font-size: 13px;
+    }
+    .copy-btn {
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      color: var(--text-muted); padding: 6px 12px; border-radius: 6px;
+      font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 6px;
+      transition: all 0.2s; font-family: var(--sans);
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+    /* ═══════════════════════════════════════════
+       CHANGELOG BOX
+    ═══════════════════════════════════════════ */
+    .changelog-section { max-width: 1100px; margin: 0 auto; padding: 0 24px 40px; }
+    .changelog-box {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+    }
+    .changelog-box h3 {
+      font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--text-dim); margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .changelog-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .changelog-item {
+      font-size: 13px; color: var(--text-muted);
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .changelog-item i { color: var(--cyan); margin-top: 4px; font-size: 10px; }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 32px; text-align: center;
+      font-size: 12px; color: var(--text-dim);
+      font-family: var(--mono);
+      background: rgba(3,7,18,0.5);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hud-bar { display: none; }
+      .docking-token { width: 48px; height: 48px; border-radius: 12px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .kiosk-inner { flex-direction: column; align-items: flex-start; }
+      .card-wide .card-wide-inner { flex-direction: column; }
+      .card-wide .card-wide-right { width: 100%; }
+      .card-wide .card-wide-right .dl-link { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <div class="ambient-bg"></div>
+  <!-- Ambient Layers -->
+  <canvas id="ambient-canvas"></canvas>
+  <div class="hero-radial"></div>
+  <div class="scanlines"></div>
 
-  <header>
+  <!-- 3D FLOATING ICON TOKENS (7 realistic rendered icons) -->
+  <div id="token-server-setup" class="docking-token gpu">
+    <img src="./assets/icons/server-rack.jpg" alt="Server">
+  </div>
+  <div id="token-server-msi" class="docking-token gpu">
+    <img src="./assets/icons/network-mesh.jpg" alt="Network">
+  </div>
+  <div id="token-server-portable" class="docking-token gpu">
+    <img src="./assets/icons/terminal.jpg" alt="Terminal">
+  </div>
+  <div id="token-agent-setup" class="docking-token gpu">
+    <img src="./assets/icons/terminal.jpg" alt="Agent" style="filter: hue-rotate(260deg) saturate(1.3);">
+  </div>
+  <div id="token-agent-msi" class="docking-token gpu">
+    <img src="./assets/icons/network-mesh.jpg" alt="Enterprise" style="filter: hue-rotate(40deg) saturate(1.2);">
+  </div>
+  <div id="token-agent-portable" class="docking-token gpu">
+    <img src="./assets/icons/server-rack.jpg" alt="Portable" style="filter: hue-rotate(50deg) saturate(1.4) brightness(1.1);">
+  </div>
+  <div id="token-av-addon" class="docking-token gpu">
+    <img src="./assets/icons/shield.jpg" alt="Shield">
+  </div>
+
+  <!-- STICKY NAV -->
+  <nav class="site-nav">
     <a href="/" class="brand">
       <div class="brand-icon"><i class="fas fa-network-wired"></i></div>
       <div>
         <div class="brand-title">LANDEPLOY <span class="brand-badge">Registry</span></div>
       </div>
     </a>
-    <div class="header-links">
-      <a href="https://landeploy.vercel.app/kiosk/register" target="_blank" class="nav-btn" style="color:var(--green);border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.08)">
-        <i class="fas fa-desktop"></i> Free Kiosk Registration
-      </a>
-      <a href="https://github.com/landeploysuite/LANDEPLOY-releases" target="_blank" class="nav-btn">
-        <i class="fab fa-github"></i> GitHub Repo
-      </a>
-      <a href="./version.json" target="_blank" class="nav-btn">
-        <i class="fas fa-code"></i> JSON Feed
-      </a>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="hud-bar">
+        <span class="hud-dot"></span>
+        <span id="hud-status">SCROLL TO DOCK ICONS</span>
+        <span style="color:var(--text);font-weight:700" id="hud-percent">0%</span>
+      </div>
+      <div class="nav-links">
+        <a href="https://landeploy.vercel.app/kiosk/register" target="_blank" class="nav-btn green">
+          <i class="fas fa-desktop"></i> Free Kiosk
+        </a>
+        <a href="https://github.com/landeploysuite/LANDEPLOY-releases" target="_blank" class="nav-btn">
+          <i class="fab fa-github"></i> GitHub
+        </a>
+        <a href="./version.json" target="_blank" class="nav-btn">
+          <i class="fas fa-code"></i> JSON
+        </a>
+      </div>
     </div>
-  </header>
+  </nav>
 
-  <div class="container">
-    <div class="hero">
+  <!-- MAIN VIEWPORT -->
+  <div class="main-viewport">
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="orbital-ring r1" style="left:50%;top:50%;transform-origin:center;margin-left:-250px;margin-top:-250px;"></div>
+      <div class="orbital-ring r2" style="left:50%;top:50%;transform-origin:center;margin-left:-350px;margin-top:-350px;"></div>
+
       <div class="hero-pill">
-        <div class="status-dot"></div>
-        <span>OFFICIAL PUBLIC RELEASE LEDGER</span>
+        <i class="fas fa-arrow-down" style="font-size:10px;"></i>
+        <span>SCROLL DOWN TO EXPERIENCE 3D ICON DOCKING</span>
       </div>
-      <h1>Release Ledger & Updates</h1>
-      <p>The centralized, immutable software distribution registry for LANDeploy Server and LANDeploy Agent.</p>
+
+      <h1>Release Ledger<br><span>& Updates Registry</span></h1>
+
+      <p>The centralized, immutable software distribution registry for LANDeploy Server and LANDeploy Agent. Watch 3D icons magnetically dock as you scroll.</p>
+
+      <button class="hero-cta" onclick="document.getElementById('cards-section').scrollIntoView({behavior:'smooth',block:'start'})">
+        <span>View Packages</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+    </header>
+
+    <!-- KIOSK NOTICE -->
+    <div class="kiosk-banner">
+      <div class="kiosk-inner">
+        <div class="kiosk-content">
+          <div class="kiosk-icon"><i class="fas fa-desktop"></i></div>
+          <div class="kiosk-text">
+            <div class="kiosk-tag">✨ SPECIAL NOTICE &bull; FREE REGISTRATION</div>
+            <h3>Free Kiosk Agent Registration</h3>
+            <p>Register school and lab kiosk systems with zero licensing fees. Immediate multi-system pairing and silent deployment.</p>
+          </div>
+        </div>
+        <a href="https://landeploy.vercel.app/kiosk/register" target="_blank" class="kiosk-btn">
+          <span>Register Kiosk</span>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
     </div>
 
-    <!-- Free Kiosk Agent Registration Notice Banner -->
-    <div class="kiosk-notice-banner">
-      <div class="kiosk-notice-content">
-        <div class="kiosk-notice-icon">
-          <i class="fas fa-desktop"></i>
-        </div>
-        <div class="kiosk-notice-text">
-          <div class="kiosk-notice-tag">✨ SPECIAL NOTICE &bull; FREE REGISTRATION</div>
-          <h3>Free Kiosk Agent Registration</h3>
-          <p>Register your school and lab kiosk systems with zero licensing fees. Get immediate multi-system pairing and silent deployment access.</p>
-        </div>
-      </div>
-      <a href="https://landeploy.vercel.app/kiosk/register" target="_blank" class="kiosk-notice-btn">
-        <span>Register Kiosk Agent</span>
-        <i class="fas fa-arrow-right"></i>
-      </a>
-    </div>
-
-    <!-- Latest Release Spotlight -->
-    <div class="spotlight-card">
-      <div class="spotlight-badge">LATEST PRODUCTION RELEASE</div>
-      <div class="spotlight-header">
-        <div class="spotlight-meta">
-          <h2>LANDeploy <span class="version-tag" id="live-version">v2.1.1</span></h2>
-          <div class="spotlight-sub">
-            <span><i class="far fa-calendar-alt"></i> <span id="live-date">November 05, 2026</span></span>
-            <span>&bull;</span>
-            <span><i class="fas fa-shield-alt" style="color:var(--green)"></i> Production Enterprise Verified</span>
-            <span>&bull;</span>
-            <span id="live-status">All Systems Operational</span>
-          </div>
-        </div>
+    <!-- DOWNLOAD CARDS -->
+    <section id="cards-section" class="cards-section">
+      <div class="section-header">
+        <span class="tag">v2.1.1 Production Release Hub</span>
+        <h2>Verified Deliverables & Packages</h2>
+        <p>3D icons dock magnetically into their designated cards as you scroll.</p>
       </div>
 
-      <div class="downloads-grid">
-        <a id="link-server" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Setup%202.1.1.exe" class="dl-btn primary">
-          <div class="dl-icon"><i class="fas fa-server"></i></div>
-          <div class="dl-details">
-            <div class="dl-title">LANDeploy Server Setup</div>
-            <div class="dl-sub">v2.1.1 &bull; Windows (x64) &bull; EXE Setup Wizard</div>
-          </div>
-          <i class="fas fa-arrow-down dl-arrow"></i>
-        </a>
+      <div class="cards-grid">
 
-        <a id="link-server-msi" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Installer%202.1.1.msi" class="dl-btn">
-          <div class="dl-icon" style="background:rgba(2, 132, 199, 0.15);color:var(--cyan)"><i class="fas fa-network-wired"></i></div>
-          <div class="dl-details">
-            <div class="dl-title">Server Enterprise MSI</div>
-            <div class="dl-sub">v2.1.1 &bull; Active Directory / GPO MSI</div>
+        <!-- Card 1: Server Setup EXE -->
+        <div class="glass-card primary">
+          <div>
+            <div class="card-header">
+              <span class="card-badge cyan">RECOMMENDED SERVER</span>
+              <span class="card-size">136.2 MB</span>
+            </div>
+            <div class="card-info">
+              <div id="slot-server-setup" class="dock-slot"></div>
+              <div>
+                <h3>LANDeploy Server Setup</h3>
+                <div class="filename">LANDeploy Server Setup 2.1.1.exe</div>
+              </div>
+            </div>
+            <p class="card-desc">Complete Windows installer wizard with Start Menu integration, desktop shortcuts, loopback config, and zero-trace uninstaller.</p>
+            <ul class="card-features">
+              <li><i class="fas fa-check" style="color:var(--cyan)"></i> Cloudflare security patches applied</li>
+              <li><i class="fas fa-check" style="color:var(--cyan)"></i> Right-click group context menus</li>
+              <li><i class="fas fa-check" style="color:var(--cyan)"></i> 40+ concurrent workstation dashboard</li>
+            </ul>
           </div>
-          <i class="fas fa-arrow-down dl-arrow"></i>
-        </a>
+          <div class="card-footer">
+            <a id="link-server" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Setup%202.1.1.exe" class="dl-link cyan-bg">
+              <i class="fas fa-download"></i> Download Server Setup
+            </a>
+          </div>
+        </div>
 
-        <a id="link-server-portable" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Portable%202.1.1.exe" class="dl-btn">
-          <div class="dl-icon" style="background:rgba(59, 130, 246, 0.15);color:var(--blue)"><i class="fas fa-box-archive"></i></div>
-          <div class="dl-details">
-            <div class="dl-title">Server Portable</div>
-            <div class="dl-sub">v2.1.1 &bull; Standalone Portable with Cyber HUD</div>
+        <!-- Card 2: Server MSI -->
+        <div class="glass-card">
+          <div>
+            <div class="card-header">
+              <span class="card-badge blue">GPO / INTUNE MSI</span>
+              <span class="card-size">154.2 MB</span>
+            </div>
+            <div class="card-info">
+              <div id="slot-server-msi" class="dock-slot"></div>
+              <div>
+                <h3>Server Enterprise MSI</h3>
+                <div class="filename">LANDeploy Server Installer 2.1.1.msi</div>
+              </div>
+            </div>
+            <p class="card-desc">Native Windows Installer (MSI) package for automated Active Directory Group Policy (GPO) and Intune mass deployments.</p>
+            <ul class="card-features">
+              <li><i class="fas fa-check" style="color:var(--blue)"></i> Silent deployment: msiexec /i /qn</li>
+              <li><i class="fas fa-check" style="color:var(--blue)"></i> Pre-configured firewall descriptors</li>
+              <li><i class="fas fa-check" style="color:var(--blue)"></i> Active Directory mass distribution</li>
+            </ul>
           </div>
-          <i class="fas fa-arrow-down dl-arrow"></i>
-        </a>
+          <div class="card-footer">
+            <a id="link-server-msi" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Installer%202.1.1.msi" class="dl-link blue-bg">
+              <i class="fas fa-download"></i> Download MSI
+            </a>
+          </div>
+        </div>
 
-        <a id="link-agent" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Setup%202.1.1.exe" class="dl-btn primary">
-          <div class="dl-icon"><i class="fas fa-desktop"></i></div>
-          <div class="dl-details">
-            <div class="dl-title">LANDeploy Agent Setup</div>
-            <div class="dl-sub">v2.1.1 &bull; Windows (x64) &bull; EXE Setup Wizard</div>
+        <!-- Card 3: Server Portable -->
+        <div class="glass-card">
+          <div>
+            <div class="card-header">
+              <span class="card-badge green">CYBER STARTUP HUD</span>
+              <span class="card-size">135.9 MB</span>
+            </div>
+            <div class="card-info">
+              <div id="slot-server-portable" class="dock-slot"></div>
+              <div>
+                <h3>Server Portable Edition</h3>
+                <div class="filename">LANDeploy Server Portable 2.1.1.exe</div>
+              </div>
+            </div>
+            <p class="card-desc">Zero-install standalone server executable with high-tech cyber startup splash HUD and persistent AppData configuration sync.</p>
+            <ul class="card-features">
+              <li><i class="fas fa-check" style="color:var(--green)"></i> Cyber splash HUD with live boot logs</li>
+              <li><i class="fas fa-check" style="color:var(--green)"></i> Survives USB unplugs (%APPDATA% sync)</li>
+              <li><i class="fas fa-check" style="color:var(--green)"></i> Zero registry traces or leftovers</li>
+            </ul>
           </div>
-          <i class="fas fa-arrow-down dl-arrow"></i>
-        </a>
+          <div class="card-footer">
+            <a id="link-server-portable" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Portable%202.1.1.exe" class="dl-link green-bg">
+              <i class="fas fa-download"></i> Download Portable
+            </a>
+          </div>
+        </div>
 
-        <a id="link-agent-msi" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Installer%202.1.1.msi" class="dl-btn">
-          <div class="dl-icon" style="background:rgba(99, 102, 241, 0.15);color:#818cf8"><i class="fas fa-building-columns"></i></div>
-          <div class="dl-details">
-            <div class="dl-title">Agent Enterprise MSI</div>
-            <div class="dl-sub">v2.1.1 &bull; Active Directory / GPO MSI</div>
+        <!-- Card 4: Agent Setup EXE -->
+        <div class="glass-card primary">
+          <div>
+            <div class="card-header">
+              <span class="card-badge purple">RECOMMENDED CLIENT</span>
+              <span class="card-size">114.7 MB</span>
+            </div>
+            <div class="card-info">
+              <div id="slot-agent-setup" class="dock-slot"></div>
+              <div>
+                <h3>LANDeploy Agent Setup</h3>
+                <div class="filename">LANDeploy Agent Setup 2.1.1.exe</div>
+              </div>
+            </div>
+            <p class="card-desc">Workstation client installer for school labs and office PCs. Registers background service and auto-discovers Server via UDP beaconing.</p>
+            <ul class="card-features">
+              <li><i class="fas fa-check" style="color:var(--purple)"></i> Hardened chat hub with DOM sanitization</li>
+              <li><i class="fas fa-check" style="color:var(--purple)"></i> Sub-millisecond UDP beacon discovery</li>
+              <li><i class="fas fa-check" style="color:var(--purple)"></i> 100% offline air-gapped security</li>
+            </ul>
           </div>
-          <i class="fas fa-arrow-down dl-arrow"></i>
-        </a>
+          <div class="card-footer">
+            <a id="link-agent" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Setup%202.1.1.exe" class="dl-link purple-bg">
+              <i class="fas fa-download"></i> Download Agent Setup
+            </a>
+          </div>
+        </div>
 
-        <a id="link-agent-portable" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Portable%202.1.1.exe" class="dl-btn">
-          <div class="dl-icon" style="background:rgba(245, 158, 11, 0.15);color:var(--amber)"><i class="fas fa-laptop-code"></i></div>
-          <div class="dl-details">
-            <div class="dl-title">Agent Portable</div>
-            <div class="dl-sub">v2.1.1 &bull; Standalone Portable with Cyber HUD</div>
+        <!-- Card 5: Agent MSI -->
+        <div class="glass-card">
+          <div>
+            <div class="card-header">
+              <span class="card-badge indigo">CLIENT GPO MSI</span>
+              <span class="card-size">130.3 MB</span>
+            </div>
+            <div class="card-info">
+              <div id="slot-agent-msi" class="dock-slot"></div>
+              <div>
+                <h3>Agent Enterprise MSI</h3>
+                <div class="filename">LANDeploy Agent Installer 2.1.1.msi</div>
+              </div>
+            </div>
+            <p class="card-desc">Enterprise MSI client package for bulk automated enrollment across hundreds of student or lab workstations simultaneously.</p>
+            <ul class="card-features">
+              <li><i class="fas fa-check" style="color:var(--indigo)"></i> Single command mass rollouts</li>
+              <li><i class="fas fa-check" style="color:var(--indigo)"></i> Auto-registers background loopback client</li>
+              <li><i class="fas fa-check" style="color:var(--indigo)"></i> Standardized IT administration</li>
+            </ul>
           </div>
-          <i class="fas fa-arrow-down dl-arrow"></i>
-        </a>
+          <div class="card-footer">
+            <a id="link-agent-msi" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Installer%202.1.1.msi" class="dl-link indigo-bg">
+              <i class="fas fa-download"></i> Download MSI
+            </a>
+          </div>
+        </div>
 
-        <a id="link-av" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDEPLOY-AV.zip" class="dl-btn">
-          <div class="dl-icon" style="background:rgba(244, 63, 94, 0.15);color:#fb7185"><i class="fas fa-shield-virus"></i></div>
-          <div class="dl-details">
-            <div class="dl-title">LANDeploy-AV Module</div>
-            <div class="dl-sub">v2.1.1 &bull; Offline OEM Antivirus Engine & Signatures</div>
+        <!-- Card 6: Agent Portable -->
+        <div class="glass-card">
+          <div>
+            <div class="card-header">
+              <span class="card-badge amber">ZERO INSTALL CLIENT</span>
+              <span class="card-size">114.5 MB</span>
+            </div>
+            <div class="card-info">
+              <div id="slot-agent-portable" class="dock-slot"></div>
+              <div>
+                <h3>Agent Portable Edition</h3>
+                <div class="filename">LANDeploy Agent Portable 2.1.1.exe</div>
+              </div>
+            </div>
+            <p class="card-desc">Instant plug-and-run workstation client with cyber startup HUD. Runs directly from USB without admin privileges or installation.</p>
+            <ul class="card-features">
+              <li><i class="fas fa-check" style="color:var(--amber)"></i> Cyber startup screen with progress bar</li>
+              <li><i class="fas fa-check" style="color:var(--amber)"></i> Ultra-lightweight footprint (&lt;35MB RAM)</li>
+              <li><i class="fas fa-check" style="color:var(--amber)"></i> Clean exit with zero residual files</li>
+            </ul>
           </div>
-          <i class="fas fa-arrow-down dl-arrow"></i>
-        </a>
+          <div class="card-footer">
+            <a id="link-agent-portable" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Portable%202.1.1.exe" class="dl-link amber-bg">
+              <i class="fas fa-download"></i> Download Portable
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 7: LANDeploy-AV (Wide) -->
+        <div class="glass-card card-wide">
+          <div class="card-wide-inner">
+            <div class="card-wide-left">
+              <div id="slot-av-addon" class="dock-slot" style="border-color:rgba(251,113,133,0.3);"></div>
+              <div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                  <span class="card-badge rose">SECURITY ADDON</span>
+                  <span class="card-size">30.6 MB (Offline ZIP)</span>
+                </div>
+                <h3 style="font-size:18px;font-weight:800;color:#fff;">LANDeploy-AV Offline Engine & Definitions</h3>
+                <p style="font-size:12px;color:#cbd5e1;margin-top:6px;max-width:600px;">
+                  Decoupled anti-virus definitions and scanning binaries. Minimizes portable USB footprint with on-demand background extraction.
+                </p>
+              </div>
+            </div>
+            <div class="card-wide-right">
+              <a id="link-av" href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDEPLOY-AV.zip" class="dl-link rose-bg" style="padding:14px 28px;">
+                <i class="fas fa-download"></i> Download LANDEPLOY-AV.zip
+              </a>
+            </div>
+          </div>
+        </div>
+
       </div>
+    </section>
 
+    <!-- CHANGELOG -->
+    <div class="changelog-section">
       <div class="changelog-box">
         <h3><i class="fas fa-list-check"></i> Release Highlights & Changelog</h3>
         <ul class="changelog-list" id="live-changelog">
@@ -707,127 +787,337 @@
       </div>
     </div>
 
-    <!-- Chronological Release Ledger Table -->
-    <h2 class="section-title"><i class="fas fa-history" style="color:var(--cyan)"></i> Ledger History</h2>
-    <div class="ledger-table-wrapper">
-      <table class="ledger-table">
-        <thead>
-          <tr>
-            <th>Version</th>
-            <th>Type</th>
-            <th>Release Date</th>
-            <th>Summary</th>
-            <th>Installers</th>
-          </tr>
-        </thead>
-                <tbody id="ledger-rows">
-          <tr>
-            <td><strong style="font-family:var(--mono);color:var(--cyan)">v2.1.1</strong></td>
-            <td><span class="tag-major" style="background:rgba(16, 185, 129, 0.2);color:var(--green);border-color:rgba(16, 185, 129, 0.3)">Production Enterprise</span></td>
-            <td style="color:var(--text-muted);font-family:var(--mono)">2026-11-07</td>
-            <td>Patched 7 Cloudflare vulnerabilities, Cyber startup screen HUD, AppData configuration sync, modular LANDeploy-AV, Enterprise MSI</td>
-            <td>
-              <a href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/tag/v2.1.1" target="_blank" style="color:var(--cyan);text-decoration:none;font-weight:600;font-size:12px">View Release &rarr;</a>
-            </td>
-          </tr>
-          <tr>
-            <td><strong style="font-family:var(--mono);color:var(--cyan)">v2.1.0</strong></td>
-            <td><span class="tag-major">Compatibility Patch</span></td>
-            <td style="color:var(--text-muted);font-family:var(--mono)">2026-10-22</td>
-            <td>Windows 11 compatibility fix, publisher metadata, dismissible update dialogs</td>
-            <td>
-              <a href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/tag/v2.1.0" target="_blank" style="color:var(--cyan);text-decoration:none;font-weight:600;font-size:12px">View Release &rarr;</a>
-            </td>
-          </tr>
-          <tr>
-            <td><strong style="font-family:var(--mono);color:var(--cyan)">v2.0.0</strong></td>
-            <td><span class="tag-major">Major Release</span></td>
-            <td style="color:var(--text-muted);font-family:var(--mono)">2026-10-11</td>
-            <td>The Unified LANDeploy Platform with real-time sync and auto-update mechanism</td>
-            <td>
-              <a href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/tag/v2.0.0" target="_blank" style="color:var(--cyan);text-decoration:none;font-weight:600;font-size:12px">View Release &rarr;</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Machine-Readable API Card -->
-    <h2 class="section-title"><i class="fas fa-robot" style="color:var(--blue)"></i> Software Automation API</h2>
-    <div class="api-card">
-      <p style="font-size:14px;color:var(--text-muted)">
-        LANDeploy applications automatically poll this endpoint at launch. If <code>current_version &lt; latest_version</code>, updates are seamlessly initiated.
-      </p>
-      <div class="api-endpoint">
-        <span id="endpoint-url">https://landeployrelease.vercel.app/version.json</span>
-        <button class="copy-btn" onclick="copyEndpoint()"><i class="far fa-copy"></i> Copy URL</button>
+    <!-- LEDGER HISTORY TABLE -->
+    <div class="ledger-section">
+      <h2 class="ledger-title"><i class="fas fa-history" style="color:var(--cyan)"></i> Ledger History</h2>
+      <div class="ledger-wrap">
+        <table class="ledger-table">
+          <thead>
+            <tr><th>Version</th><th>Type</th><th>Release Date</th><th>Summary</th><th>Installers</th></tr>
+          </thead>
+          <tbody id="ledger-rows">
+            <tr>
+              <td><strong style="font-family:var(--mono);color:var(--cyan)">v2.1.1</strong></td>
+              <td><span class="tag-badge green">Production Enterprise</span></td>
+              <td style="color:var(--text-muted);font-family:var(--mono)">2026-11-07</td>
+              <td>Patched 7 Cloudflare vulnerabilities, Cyber startup screen HUD, AppData config sync, modular LANDeploy-AV, Enterprise MSI</td>
+              <td><a href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/tag/v2.1.1" target="_blank" style="color:var(--cyan);text-decoration:none;font-weight:600;font-size:12px">View Release &rarr;</a></td>
+            </tr>
+            <tr>
+              <td><strong style="font-family:var(--mono);color:var(--cyan)">v2.1.0</strong></td>
+              <td><span class="tag-badge cyan">Compatibility Patch</span></td>
+              <td style="color:var(--text-muted);font-family:var(--mono)">2026-10-22</td>
+              <td>Windows 11 compatibility fix, publisher metadata, dismissible update dialogs</td>
+              <td><a href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/tag/v2.1.0" target="_blank" style="color:var(--cyan);text-decoration:none;font-weight:600;font-size:12px">View Release &rarr;</a></td>
+            </tr>
+            <tr>
+              <td><strong style="font-family:var(--mono);color:var(--cyan)">v2.0.0</strong></td>
+              <td><span class="tag-badge cyan">Major Release</span></td>
+              <td style="color:var(--text-muted);font-family:var(--mono)">2026-10-11</td>
+              <td>The Unified LANDeploy Platform with real-time sync and auto-update mechanism</td>
+              <td><a href="https://github.com/landeploysuite/LANDEPLOY-releases/releases/tag/v2.0.0" target="_blank" style="color:var(--cyan);text-decoration:none;font-weight:600;font-size:12px">View Release &rarr;</a></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+
+    <!-- API ENDPOINT -->
+    <div class="api-section">
+      <h2 class="ledger-title"><i class="fas fa-robot" style="color:var(--blue)"></i> Software Automation API</h2>
+      <div class="api-card">
+        <p>LANDeploy applications automatically poll this endpoint at launch. If <code style="background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:12px;">current_version &lt; latest_version</code>, updates are seamlessly initiated.</p>
+        <div class="api-endpoint">
+          <span id="endpoint-url">https://landeployrelease.vercel.app/version.json</span>
+          <button class="copy-btn" onclick="copyEndpoint()"><i class="far fa-copy"></i> Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <p>&copy; 2026 LANDeploy Suite &bull; Open-source distribution registry hosted on GitHub & Vercel</p>
+    </footer>
   </div>
 
-  <footer>
-    <p>&copy; 2026 LANDeploy Suite &bull; Open-source distribution registry hosted on GitHub & Vercel</p>
-  </footer>
-
+  <!-- ═══════════════════════════════════════════════════════════
+       SCRIPT: SMOOTH KINETIC SCROLL & 3D ICON DOCKING ENGINE
+  ═══════════════════════════════════════════════════════════ -->
   <script>
+    // ──── 1. TOKEN CONFIGURATION ────
+    const tokens = [
+      {
+        id: 'token-server-setup', slotId: 'slot-server-setup',
+        heroX: 0.15, heroY: 0.30,
+        floatSpeed: 1.2, floatAmpX: 20, floatAmpY: 16,
+        color: '#22d3ee'
+      },
+      {
+        id: 'token-server-msi', slotId: 'slot-server-msi',
+        heroX: 0.82, heroY: 0.22,
+        floatSpeed: 1.0, floatAmpX: -18, floatAmpY: 20,
+        color: '#3b82f6'
+      },
+      {
+        id: 'token-server-portable', slotId: 'slot-server-portable',
+        heroX: 0.08, heroY: 0.65,
+        floatSpeed: 1.5, floatAmpX: 24, floatAmpY: -18,
+        color: '#10b981'
+      },
+      {
+        id: 'token-agent-setup', slotId: 'slot-agent-setup',
+        heroX: 0.88, heroY: 0.55,
+        floatSpeed: 1.3, floatAmpX: -22, floatAmpY: 22,
+        color: '#c084fc'
+      },
+      {
+        id: 'token-agent-msi', slotId: 'slot-agent-msi',
+        heroX: 0.22, heroY: 0.80,
+        floatSpeed: 1.4, floatAmpX: 16, floatAmpY: -20,
+        color: '#818cf8'
+      },
+      {
+        id: 'token-agent-portable', slotId: 'slot-agent-portable',
+        heroX: 0.75, heroY: 0.78,
+        floatSpeed: 1.1, floatAmpX: -20, floatAmpY: 18,
+        color: '#fbbf24'
+      },
+      {
+        id: 'token-av-addon', slotId: 'slot-av-addon',
+        heroX: 0.50, heroY: 0.88,
+        floatSpeed: 1.6, floatAmpX: 14, floatAmpY: -16,
+        color: '#fb7185'
+      }
+    ];
+
+    // Cache DOM
+    tokens.forEach(t => {
+      t.el = document.getElementById(t.id);
+      t.slotEl = document.getElementById(t.slotId);
+      t.currentX = window.innerWidth * t.heroX;
+      t.currentY = window.innerHeight * t.heroY;
+      t.currentScale = 1.3;
+      t.currentRotX = 0;
+      t.currentRotY = 0;
+      t.currentRotZ = 0;
+      t.isDocked = false;
+    });
+
+    // ──── 2. SMOOTH SCROLL STATE ────
+    let targetScrollY = window.scrollY;
+    let smoothScrollY = window.scrollY;
+    const lerpFactor = 0.08;
+
+    window.addEventListener('scroll', () => { targetScrollY = window.scrollY; }, { passive: true });
+
+    // ──── 3. AMBIENT PARTICLE ENGINE ────
+    const pCanvas = document.getElementById('ambient-canvas');
+    const pCtx = pCanvas.getContext('2d');
+    let pW = pCanvas.width = window.innerWidth;
+    let pH = pCanvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      pW = pCanvas.width = window.innerWidth;
+      pH = pCanvas.height = window.innerHeight;
+    });
+
+    const particles = [];
+    for (let i = 0; i < 90; i++) {
+      particles.push({
+        x: Math.random() * pW,
+        y: Math.random() * pH,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35 - 0.15,
+        size: Math.random() * 2.2 + 0.6,
+        alpha: Math.random() * 0.45 + 0.15,
+        color: Math.random() > 0.45 ? '#22d3ee' : (Math.random() > 0.5 ? '#3b82f6' : '#818cf8')
+      });
+    }
+
+    // ──── 4. MAIN ANIMATION LOOP ────
+    let clock = 0;
+    const hudStatus = document.getElementById('hud-status');
+    const hudPercent = document.getElementById('hud-percent');
+
+    function animate() {
+      clock += 0.02;
+
+      // Smooth scroll LERP
+      smoothScrollY += (targetScrollY - smoothScrollY) * lerpFactor;
+
+      // Docking progress
+      const cardsSec = document.getElementById('cards-section');
+      const cardsTop = cardsSec ? cardsSec.offsetTop - 300 : 800;
+      const dockProgress = Math.min(1, Math.max(0, smoothScrollY / cardsTop));
+      const pct = Math.round(dockProgress * 100);
+
+      if (hudPercent) hudPercent.innerText = pct + '%';
+      if (hudStatus) {
+        if (dockProgress > 0.95) {
+          hudStatus.innerText = 'ALL ICONS DOCKED';
+          hudStatus.style.color = '#10b981';
+        } else if (dockProgress > 0.1) {
+          hudStatus.innerText = 'DOCKING IN PROGRESS...';
+          hudStatus.style.color = '#22d3ee';
+        } else {
+          hudStatus.innerText = 'SCROLL TO DOCK ICONS';
+          hudStatus.style.color = '#64748b';
+        }
+      }
+
+      // ── Animate 3D Tokens ──
+      tokens.forEach((t, i) => {
+        const heroFloatX = Math.cos(clock * t.floatSpeed + i * 0.9) * t.floatAmpX;
+        const heroFloatY = Math.sin(clock * t.floatSpeed + i * 0.9) * t.floatAmpY;
+        const originX = (window.innerWidth * t.heroX) + heroFloatX;
+        const originY = (window.innerHeight * t.heroY) + heroFloatY;
+
+        let targetX = originX;
+        let targetY = originY;
+        let targetScale = 1.3;
+        let targetRotX = Math.sin(clock * t.floatSpeed) * 18;
+        let targetRotY = Math.cos(clock * t.floatSpeed * 0.8) * 22;
+        let targetRotZ = Math.sin(clock * 0.4 + i) * 10;
+
+        if (t.slotEl) {
+          const rect = t.slotEl.getBoundingClientRect();
+          const destX = rect.left + rect.width / 2 - 36;
+          const destY = rect.top + rect.height / 2 - 36;
+
+          // Staggered flight curve per icon
+          const stagger = i * 0.05;
+          const tFlight = Math.min(1, Math.max(0, (dockProgress - stagger) / (1 - stagger)));
+          // Smoothstep easing
+          const s = tFlight * tFlight * (3 - 2 * tFlight);
+
+          targetX = originX + (destX - originX) * s;
+          targetY = originY + (destY - originY) * s;
+          targetScale = 1.3 - (0.5 * s);
+          targetRotX *= (1 - s);
+          targetRotY *= (1 - s);
+          targetRotZ *= (1 - s);
+
+          // Magnetic snap
+          if (s > 0.96) {
+            if (!t.isDocked) {
+              t.isDocked = true;
+              t.slotEl.classList.add('docked-active');
+            }
+          } else {
+            if (t.isDocked) {
+              t.isDocked = false;
+              t.slotEl.classList.remove('docked-active');
+            }
+          }
+        }
+
+        // LERP smoothing
+        t.currentX += (targetX - t.currentX) * 0.12;
+        t.currentY += (targetY - t.currentY) * 0.12;
+        t.currentScale += (targetScale - t.currentScale) * 0.12;
+        t.currentRotX += (targetRotX - t.currentRotX) * 0.12;
+        t.currentRotY += (targetRotY - t.currentRotY) * 0.12;
+        t.currentRotZ += (targetRotZ - t.currentRotZ) * 0.12;
+
+        t.el.style.transform = `translate3d(${t.currentX}px, ${t.currentY}px, 0) scale(${t.currentScale}) rotateX(${t.currentRotX}deg) rotateY(${t.currentRotY}deg) rotateZ(${t.currentRotZ}deg)`;
+
+        // Shadow depth
+        if (t.isDocked) {
+          t.el.style.boxShadow = `0 0 24px -2px ${t.color}88, inset 0 0 12px ${t.color}22`;
+          t.el.style.borderColor = t.color + '66';
+        } else {
+          t.el.style.boxShadow = `0 16px 48px -8px ${t.color}44, 0 0 30px -5px ${t.color}33`;
+          t.el.style.borderColor = t.color + '33';
+        }
+
+        // Opacity
+        t.el.style.opacity = dockProgress > 0.98 && t.isDocked ? '0.85' : '1';
+      });
+
+      // ── Animate Particles ──
+      pCtx.clearRect(0, 0, pW, pH);
+      const scrollVel = (targetScrollY - smoothScrollY) * 0.015;
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy - scrollVel;
+        if (p.x < 0) p.x = pW;
+        if (p.x > pW) p.x = 0;
+        if (p.y < 0) p.y = pH;
+        if (p.y > pH) p.y = 0;
+        pCtx.fillStyle = p.color;
+        pCtx.globalAlpha = p.alpha;
+        pCtx.beginPath();
+        pCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        pCtx.fill();
+      });
+
+      // ── Particle Connection Lines ──
+      pCtx.globalAlpha = 0.08;
+      pCtx.strokeStyle = '#22d3ee';
+      pCtx.lineWidth = 0.5;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = dx * dx + dy * dy;
+          if (dist < 12000) {
+            pCtx.globalAlpha = 0.06 * (1 - dist / 12000);
+            pCtx.beginPath();
+            pCtx.moveTo(particles[i].x, particles[i].y);
+            pCtx.lineTo(particles[j].x, particles[j].y);
+            pCtx.stroke();
+          }
+        }
+      }
+      pCtx.globalAlpha = 1.0;
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+
+    // ──── 5. COPY ENDPOINT ────
     function copyEndpoint() {
       const url = document.getElementById('endpoint-url').innerText;
       navigator.clipboard.writeText(url).then(() => {
         const btn = document.querySelector('.copy-btn');
         btn.innerHTML = '<i class="fas fa-check" style="color:#10b981"></i> Copied!';
-        setTimeout(() => {
-          btn.innerHTML = '<i class="far fa-copy"></i> Copy URL';
-        }, 2000);
+        setTimeout(() => { btn.innerHTML = '<i class="far fa-copy"></i> Copy'; }, 2000);
       });
     }
 
-    // Dynamic hydration from version.json
+    // ──── 6. VERSION.JSON HYDRATION ────
     fetch('./version.json')
       .then(res => res.json())
       .then(data => {
         if (!data) return;
-        if (data.latest_version) {
-          document.getElementById('live-version').innerText = `v${data.latest_version}`;
-        }
-        if (data.release_date) {
-          document.getElementById('live-date').innerText = data.release_date;
-        }
         if (data.downloads) {
-          if (data.downloads.server_setup && data.downloads.server_setup.url) {
-            const el = document.getElementById('link-server');
-            if (el) el.href = data.downloads.server_setup.url;
-          }
-          if (data.downloads.server_msi && data.downloads.server_msi.url) {
-            const el = document.getElementById('link-server-msi');
-            if (el) el.href = data.downloads.server_msi.url;
-          }
-          if (data.downloads.server_portable && data.downloads.server_portable.url) {
-            const el = document.getElementById('link-server-portable');
-            if (el) el.href = data.downloads.server_portable.url;
-          }
-          if (data.downloads.agent_setup && data.downloads.agent_setup.url) {
-            const el = document.getElementById('link-agent');
-            if (el) el.href = data.downloads.agent_setup.url;
-          }
-          if (data.downloads.agent_msi && data.downloads.agent_msi.url) {
-            const el = document.getElementById('link-agent-msi');
-            if (el) el.href = data.downloads.agent_msi.url;
-          }
-          if (data.downloads.agent_portable && data.downloads.agent_portable.url) {
-            const el = document.getElementById('link-agent-portable');
-            if (el) el.href = data.downloads.agent_portable.url;
-          }
-          if (data.downloads.av_addon && data.downloads.av_addon.url) {
-            const el = document.getElementById('link-av');
-            if (el) el.href = data.downloads.av_addon.url;
+          const linkMap = {
+            server_setup: 'link-server',
+            server_msi: 'link-server-msi',
+            server_portable: 'link-server-portable',
+            agent_setup: 'link-agent',
+            agent_msi: 'link-agent-msi',
+            agent_portable: 'link-agent-portable',
+            av_addon: 'link-av'
+          };
+          for (const [key, elId] of Object.entries(linkMap)) {
+            if (data.downloads[key] && data.downloads[key].url) {
+              const el = document.getElementById(elId);
+              if (el) el.href = data.downloads[key].url;
+            }
           }
         }
         if (data.release_notes && data.release_notes.length > 0) {
           const list = document.getElementById('live-changelog');
-          list.innerHTML = data.release_notes.map(n => `<li class="changelog-item"><i class="fas fa-chevron-right"></i> ${n}</li>`).join('');
+          if (list) {
+            list.innerHTML = data.release_notes.map(n =>
+              `<li class="changelog-item"><i class="fas fa-chevron-right"></i> ${n}</li>`
+            ).join('');
+          }
         }
       })
-      .catch(e => console.log('Offline/local preview mode'));
+      .catch(() => {});
   </script>
 </body>
 </html>

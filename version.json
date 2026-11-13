@@ -13,51 +13,44 @@
   ],
   "downloads": {
     "server_setup": {
-      "name": "LANDeploy Server Setup 2.1.1.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Setup%202.1.1.exe",
-      "fallback_url": "https://landeploy.vercel.app/SETUPS/v2.1.1/LANDeploy%20Server%20Setup%202.1.1.exe",
+      "name": "LANDeploy.Server.Setup.2.1.1.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Server.Setup.2.1.1.exe",
       "size_bytes": 136153347,
       "sha256": "2125BF549E834D17C138F2B64F4108294A081CD2A3A8D9DCC07B9681E6094B1B"
     },
     "server_msi": {
-      "name": "LANDeploy Server Installer 2.1.1.msi",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Installer%202.1.1.msi",
-      "fallback_url": "https://landeploy.vercel.app/SETUPS/v2.1.1/LANDeploy%20Server%20Installer%202.1.1.msi",
+      "name": "LANDeploy.Server.Installer.2.1.1.msi",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Server.Installer.2.1.1.msi",
       "size_bytes": 154248155,
       "sha256": "E394E5FE0AA26772F140872B8E33F5F54F0A154CB1704B1DB72BEE021802ADE4"
     },
     "server_portable": {
-      "name": "LANDeploy Server Portable 2.1.1.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Portable%202.1.1.exe",
-      "fallback_url": "https://landeploy.vercel.app/SETUPS/v2.1.1/LANDeploy%20Server%20Portable%202.1.1.exe",
+      "name": "LANDeploy.Server.Portable.2.1.1.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Server.Portable.2.1.1.exe",
       "size_bytes": 135914786,
       "sha256": "DF0ABA89CFC9FB6968DF985B014049F1234B07F241451196F65227F9634FB750"
     },
     "agent_setup": {
-      "name": "LANDeploy Agent Setup 2.1.1.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Setup%202.1.1.exe",
-      "fallback_url": "https://landeploy.vercel.app/SETUPS/v2.1.1/LANDeploy%20Agent%20Setup%202.1.1.exe",
+      "name": "LANDeploy.Agent.Setup.2.1.1.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Agent.Setup.2.1.1.exe",
       "size_bytes": 114718282,
       "sha256": "FE5F9F13F7006F357D067A70364B12B8D23A2C7210149C8D323C34C4579EE6E6"
     },
     "agent_msi": {
-      "name": "LANDeploy Agent Installer 2.1.1.msi",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Installer%202.1.1.msi",
-      "fallback_url": "https://landeploy.vercel.app/SETUPS/v2.1.1/LANDeploy%20Agent%20Installer%202.1.1.msi",
+      "name": "LANDeploy.Agent.Installer.2.1.1.msi",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Agent.Installer.2.1.1.msi",
       "size_bytes": 130322432,
       "sha256": "7974858108EE7D33804EE3CA999F252395F32F2EA99D77F020EC98EF8AC07951"
     },
     "agent_portable": {
-      "name": "LANDeploy Agent Portable 2.1.1.exe",
-      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Portable%202.1.1.exe",
-      "fallback_url": "https://landeploy.vercel.app/SETUPS/v2.1.1/LANDeploy%20Agent%20Portable%202.1.1.exe",
+      "name": "LANDeploy.Agent.Portable.2.1.1.exe",
+      "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Agent.Portable.2.1.1.exe",
       "size_bytes": 114479688,
       "sha256": "33355707A19586967E087BF395EC94C7875A79EBCB553C672C3CB619661F5D0A"
     },
     "av_addon": {
       "name": "LANDEPLOY-AV.zip",
       "url": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDEPLOY-AV.zip",
-      "fallback_url": "https://landeploy.vercel.app/SETUPS/v2.1.1/LANDEPLOY-AV.zip",
       "size_bytes": 30557081,
       "sha256": "1BD14C98EDE50829D90B32C52F967BF8402ADA93CBAA8EC5EE9E1240DC5F94EC"
     }

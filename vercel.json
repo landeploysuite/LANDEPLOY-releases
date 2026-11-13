@@ -13,42 +13,42 @@
   "redirects": [
     {
       "source": "/download/agent",
-      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Setup%202.1.1.exe",
+      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Agent.Setup.2.1.1.exe",
       "permanent": false
     },
     {
       "source": "/download/server",
-      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Setup%202.1.1.exe",
+      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Server.Setup.2.1.1.exe",
       "permanent": false
     },
     {
       "source": "/download/agent-setup",
-      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Setup%202.1.1.exe",
+      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Agent.Setup.2.1.1.exe",
       "permanent": false
     },
     {
       "source": "/download/server-setup",
-      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Setup%202.1.1.exe",
+      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Server.Setup.2.1.1.exe",
       "permanent": false
     },
     {
       "source": "/download/agent-msi",
-      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Installer%202.1.1.msi",
+      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Agent.Installer.2.1.1.msi",
       "permanent": false
     },
     {
       "source": "/download/server-msi",
-      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Installer%202.1.1.msi",
+      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Server.Installer.2.1.1.msi",
       "permanent": false
     },
     {
       "source": "/download/agent-portable",
-      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Agent%20Portable%202.1.1.exe",
+      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Agent.Portable.2.1.1.exe",
       "permanent": false
     },
     {
       "source": "/download/server-portable",
-      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy%20Server%20Portable%202.1.1.exe",
+      "destination": "https://github.com/landeploysuite/LANDEPLOY-releases/releases/download/v2.1.1/LANDeploy.Server.Portable.2.1.1.exe",
       "permanent": false
     },
     {
